@@ -1,5 +1,15 @@
 package com.seamfix.assessment.trade;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * TODO:
@@ -24,8 +34,21 @@ package com.seamfix.assessment.trade;
  * }'
  * -----------------------------------------------------------------------------------
  */
-
-
+  
+@RestController()
+@RequestMapping("/api/v1/trade")
 public class TradeController {
 
+    @Autowired
+    private TradeService tradeService;
+
+    @PostMapping
+    public ResponseEntity<TradeResponse> cretaeNewInvestment(@RequestBody StartTradeRequest request) {
+       return ResponseEntity.ok(this.tradeService.createNewInvestment(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<TradeResponse> getInvestment(@RequestParam("userName") String userName) {
+        return ResponseEntity.ok(this.tradeService.getInvestment(userName));
+    }
 }

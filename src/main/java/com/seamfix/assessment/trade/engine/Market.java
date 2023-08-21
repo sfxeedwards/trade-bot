@@ -4,6 +4,8 @@ import com.seamfix.assessment.trade.data.InvestmentModel;
 import com.seamfix.assessment.trade.data.InvestmentStatus;
 import com.seamfix.assessment.trade.repository.UserInvestment;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
  *  Seek all usages of "System.out" and replace them with log4j implemented logger.
  */
 
+ @Slf4j
 @Component
 @RequiredArgsConstructor
 public class Market {
@@ -76,6 +79,13 @@ public class Market {
             investment.setStatus(InvestmentStatus.TRADING);
         }
         investment.setTradeAttempt(investment.getTradeAttempt() + 1);
-        System.out.printf("INVESTMENT STATUS FOR: %s is %s", investment.getUserName(), investment.getStatus());
+        log.info("INVESTMENT STATUS FOR: " + investment.getUserName() + " is " + investment.getStatus());
+        if(investment.getTradeAttempt() >= investment.getMaxTradeAttempt()) {
+            investment.setStatus(InvestmentStatus.ENDED);
+        }else if(investment.getTradeAttempt() < investment.getMaxTradeAttempt()) {
+            investment.setStatus(InvestmentStatus.TRADING);
+        } else {
+            investment.setStatus(InvestmentStatus.PAUSED);
+        }
     }
 }

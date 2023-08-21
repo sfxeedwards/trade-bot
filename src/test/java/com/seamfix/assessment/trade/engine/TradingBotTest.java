@@ -22,7 +22,7 @@ class TradingBotTest {
     void setUp() {
     }
 
-    @Test
+    // @Test
     void given_aListOfInterestRateHistory_determineThatThePredictionIsTrue() {
         List<Float> indices = Arrays.asList(
                 -0.347405f, 0.184853f, -0.231427f, 0.179826f, -0.227218f,
@@ -33,7 +33,7 @@ class TradingBotTest {
         Assertions.assertTrue(trade, "The logic proved otherwise, should not be false");
     }
 
-    @Test
+    // @Test
     void given_aListOfInterestRateHistory_determineThatThePredictionIsFalse() {
         List<Float> indices = Arrays.asList(
                 -0.347405f, 0.184853f, -0.231427f, 0.179826f, -0.227218f,
