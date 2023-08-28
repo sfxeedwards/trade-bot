@@ -32,7 +32,17 @@ public class TradingBot {
      * @return TRUE to indicate there's a likelihood for next trades to be profitable, FALSE otherwise
      */
     public boolean predictTrade(List<Float> interestHistory){
-        throw new UnsupportedOperationException("Not Implemented");
+
+        int i = 0;
+        int n = 10;
+        float total = 0F;
+        int size = interestHistory.size();
+        for ( int x = i; x < n; x++) {
+            if ( x < size ) {
+                total += interestHistory.get(x);
+            }
+        }
+        return total / n >= 0;
     }
 
 

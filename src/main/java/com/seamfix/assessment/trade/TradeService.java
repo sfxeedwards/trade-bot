@@ -45,4 +45,23 @@ public class TradeService {
 
         return new TradeResponse<>("Successful", investmentModel);
     }
+
+    /**
+     * Gets a user's investment
+     * @param userName investment username
+     * @return response
+     */
+    public TradeResponse<InvestmentModel> updateInvestment(String userName, StartTradeRequest request){
+        InvestmentModel investmentModel = investment.getInvestment(userName);
+        if(investmentModel == null){
+            return new TradeResponse<>("Not found", null);
+        }
+
+        investmentModel.setPrincipal(request.getPrincipal());
+        boolean saved = investment.updateNewInvestment(request.getUserName(), investmentModel);
+        return new TradeResponse<>(saved ? "Update investment Successfully" : "Investment does not exist", null);
+    }
+
+
+
 }

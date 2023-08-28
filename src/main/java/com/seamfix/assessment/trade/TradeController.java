@@ -1,6 +1,12 @@
 package com.seamfix.assessment.trade;
 
 
+import com.seamfix.assessment.trade.data.InvestmentModel;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
 /**
  * TODO:
  *  TASK 2:
@@ -25,7 +31,18 @@ package com.seamfix.assessment.trade;
  * -----------------------------------------------------------------------------------
  */
 
-
+@Controller("/api/v1/trade")
+@AllArgsConstructor
 public class TradeController {
 
+    protected final TradeService tradeService;
+
+    @GetMapping()
+    public ResponseEntity<TradeResponse<InvestmentModel>> getInvestment(@RequestParam("userName") String username) {
+        return ResponseEntity.ok(this.tradeService.getInvestment(username));
+    }
+    @PostMapping()
+    public ResponseEntity<TradeResponse<String>> createNewInvestment(@RequestBody StartTradeRequest request) {
+        return ResponseEntity.ok(this.tradeService.createNewInvestment(request));
+    }
 }

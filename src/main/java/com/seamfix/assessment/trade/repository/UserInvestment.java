@@ -22,12 +22,27 @@ public class UserInvestment {
      * @param investment the investment;
      */
     public boolean saveNewInvestment(String username, InvestmentModel investment){
+        if(!investments.containsKey(username)){
+            return false;
+        }
+        investments.put(username, investment);
+        return true;
+    }
+
+    /**
+     * Update a new investment entry
+     *
+     * @param username the username of the investor; typically an email address
+     * @param investment the investment;
+     */
+    public boolean updateNewInvestment(String username, InvestmentModel investment){
         if(investments.containsKey(username)){
             return false;
         }
         investments.put(username, investment);
         return true;
     }
+
 
     /**
      * Gets the investment for an investor
