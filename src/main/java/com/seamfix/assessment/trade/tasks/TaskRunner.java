@@ -4,6 +4,7 @@ package com.seamfix.assessment.trade.tasks;
 import com.seamfix.assessment.trade.engine.Market;
 import com.seamfix.assessment.trade.engine.TradingBot;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 @Component
+@Slf4j
 @AllArgsConstructor
 public class TaskRunner {
 
@@ -34,7 +36,7 @@ public class TaskRunner {
     @Scheduled(fixedDelay = 1000)
     public void runInterestIndicesMarket(){
         double newInterestRate = ThreadLocalRandom.current().nextDouble(-0.50, 0.50);
-        System.out.printf("New interest rate indices: %f", newInterestRate);
+       log.info("New interest rate indices: {}", newInterestRate);
         System.out.println();
         market.saveNewInterest((float)newInterestRate);
         market.doBotTrades();

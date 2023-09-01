@@ -4,6 +4,7 @@ import com.seamfix.assessment.trade.data.InvestmentModel;
 import com.seamfix.assessment.trade.data.InvestmentStatus;
 import com.seamfix.assessment.trade.repository.UserInvestment;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class Market {
 
@@ -65,17 +67,20 @@ public class Market {
      *  HINT:{@link InvestmentModel#getTradeAttempt()} tracks the number of attempts of performing a trade
      */
     public void doBotTrade(InvestmentModel investment){
-        boolean shouldTrade = tradingBot.shouldTrade();
-        if(shouldTrade){
-            float interestIndex = getCurrentInterest();
-            double proceed = investment.getPrincipal() * interestIndex;
-            double newPrincipal = proceed + investment.getPrincipal();
-            investment.setPrincipal(newPrincipal);
-            investment.getProceedsHistory().add(0, (float)proceed);
-            investment.setTotalTradePerformed(investment.getTotalTradePerformed() + 1);
-            investment.setStatus(InvestmentStatus.TRADING);
+        if(investment.getTotalTradePerformed() >= investment.getMaxTradeAttempt()) investment.setStatus(InvestmentStatus.ENDED);
+        else {
+            boolean shouldTrade = tradingBot.shouldTrade();
+            if(shouldTrade){
+                float interestIndex = getCurrentInterest();
+                double proceed = investment.getPrincipal() * interestIndex;
+                double newPrincipal = proceed + investment.getPrincipal();
+                investment.setPrincipal(newPrincipal);
+                investment.getProceedsHistory().add(0, (float)proceed);
+                investment.setTotalTradePerformed(investment.getTotalTradePerformed() + 1);
+                investment.setStatus(InvestmentStatus.TRADING);
+            }else investment.setStatus(InvestmentStatus.PAUSED);
         }
         investment.setTradeAttempt(investment.getTradeAttempt() + 1);
-        System.out.printf("INVESTMENT STATUS FOR: %s is %s", investment.getUserName(), investment.getStatus());
+       log.info("INVESTMENT STATUS FOR: {} is {}", investment.getUserName(), investment.getStatus());
     }
 }
